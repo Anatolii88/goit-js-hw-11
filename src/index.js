@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import NewApiService from './api-service';
@@ -21,14 +22,22 @@ function onSearch(e) {
   galleryEl.innerHTML=""
   newApiService.page = 1;
   newApiService.query = e.currentTarget.elements.searchQuery.value;
-  newApiService.fetchArticles().then(renderPhoto);
-  loadMoreEl.classList.add('is-hidden');
+  loadMoreEl.classList.remove('is-hidden')
+  if (newApiService.query === '') {
+    return
+  } else { 
+ newApiService.fetchArticles().then(renderPhoto);
+  }
+  
  }
 
 
 function renderPhoto(data) { 
-  console.log(data.data.hits)
-  const createCard = data.data.hits.map((item) => { 
+  console.log(data.data);
+  if (data.data.hits.length === 0) {
+    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+  } else { 
+const createCard = data.data.hits.map((item) => { 
     const card = `<a class="card-link"   href="${item.largeImageURL}"><div class="photo-card">
       <img src="${item.webformatURL}" alt="${item.tags}" loading="lazy" width="335px" height="200px" />
       <div class="info">
@@ -59,7 +68,10 @@ function renderPhoto(data) {
     
   galleryEl.insertAdjacentHTML('beforeend', createCard)
   const lightbox = new SimpleLightbox('.gallery a', { /* options */ });
-   lightbox.refresh()
+  lightbox.refresh()
+  loadMoreEl.classList.add('is-hidden');
+  }
+  
 }
 
 function onLoadMore() { 
