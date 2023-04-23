@@ -18,11 +18,94 @@
   border-radius: 2px;
 }
 
-.example .background {
-  height: 240px;
-  // ❗️❗️❗️ The path to images from a SASS file
-  // is always the same as from the css folder.
-  background-image: url('../images/logo.png');
-  background-size: cover;
-  background-position: center;
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+
+.search-form {
+  text-align: center;
+}
+
+
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  // outline: 2px solid tomato;
+  max-width: 1400px;
+  margin: 15px auto;
+  padding: 15px;
+
+}
+
+.card-link {
+  color: black;
+  text-decoration: none;
+
+}
+
+.photo-card {
+  width: 335px;
+  height: 300px;
+  // outline: 2px solid blue;  
+  background-color: #FFFFFF;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 0px 0px 4px 4px;
+
+}
+
+.img {
+  object-fit: cover;
+
+}
+
+.info {
+  padding: 10px;
+  // margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-item {
+  text-align: center;
+}
+
+.info-item_text {
+  display: inline-block;
+  margin-top: 5px;
+
+}
+
+
+
+.load-more {
+  display: none;
+  cursor: pointer;
+
+}
+
+.is-hidden {
+  display: block;
+
+}
+
+
+.card {
+  outline: 2px solid blue;
+  width: 335px;
+  height: 200px;
+}
+
+.gallery-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
