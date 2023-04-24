@@ -4,6 +4,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import NewApiService from './api-service';
 
+// Экземпляр класса NewApiService
 const newApiService = new NewApiService()
 
 
@@ -17,27 +18,38 @@ const form = document.querySelector('.search-form')
 form.addEventListener('submit', onSearch)
 
 // Функция при нажатии на поиск
-function onSearch(e) {
+async function onSearch(e) {
+  try {
   e.preventDefault()
-  galleryEl.innerHTML=""
+    galleryEl.innerHTML = "";
+    loadMoreEl.classList.remove('is-hidden');
   newApiService.page = 1;
   newApiService.query = e.currentTarget.elements.searchQuery.value;
-  loadMoreEl.classList.remove('is-hidden')
-  if (newApiService.query === '') {
+  if (newApiService.query.trim() === '') {
     return
   } else { 
- newApiService.fetchArticles().then(renderPhoto);
+  const articles =  await newApiService.fetchArticles()
+     renderPhoto(articles)
+    const totalHits = articles.data.totalHits
+    if (totalHits) { 
+  Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    }
+    
+  }
+  } catch { 
+    console.log(error)
   }
   
  }
 
-
-function renderPhoto(data) { 
-  console.log(data.data);
-  if (data.data.hits.length === 0) {
+// Функция создает разметку
+function renderPhoto(articles) { 
+  
+  if (articles.data.hits.length === 0) {
     Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    return
   } else { 
-const createCard = data.data.hits.map((item) => { 
+const createCard = articles.data.hits.map((item) => { 
     const card = `<a class="card-link"   href="${item.largeImageURL}"><div class="photo-card">
       <img src="${item.webformatURL}" alt="${item.tags}" loading="lazy" width="335px" height="200px" />
       <div class="info">
@@ -68,13 +80,28 @@ const createCard = data.data.hits.map((item) => {
     
   galleryEl.insertAdjacentHTML('beforeend', createCard)
   const lightbox = new SimpleLightbox('.gallery a', { /* options */ });
-  lightbox.refresh()
-  loadMoreEl.classList.add('is-hidden');
+    lightbox.refresh()
+    if (articles.data.hits.length < 40) {
+     loadMoreEl.classList.remove('is-hidden');
+     Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results`);
+   } else { 
+     loadMoreEl.classList.add('is-hidden');
+   }
   }
   
 }
 
-function onLoadMore() { 
-  newApiService.page += 1;
-  newApiService.fetchArticles().then(renderPhoto);
+// Функция догружает статьи на страницу , при нажатии  на кнопку "Load more"
+async function onLoadMore() { 
+  try {
+newApiService.page += 1;
+  const articles =  await newApiService.fetchArticles()
+    renderPhoto(articles);
+    window.scrollBy({
+  top: 600,
+  behavior: "smooth",
+});
+  } catch { 
+console.log(error)
+  }
 }

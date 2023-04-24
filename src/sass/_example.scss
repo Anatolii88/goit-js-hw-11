@@ -29,7 +29,14 @@
 
 
 .search-form {
+  background-color: #6A5ACD;
   text-align: center;
+  padding: 10px;
+}
+
+.search-form-input{
+ 
+  border-radius: 3px;
 }
 
 
@@ -87,6 +94,10 @@
 
 
 .load-more {
+  background-color: #6A5ACD;
+  color: #FFFFFF;
+  border-radius: 3px;
+  border-color: #6A5ACD;
   display: none;
   cursor: pointer;
 

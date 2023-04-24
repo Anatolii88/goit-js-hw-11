@@ -16,8 +16,8 @@ export default class NewApiService {
     this.query = '';
     this.page = 1;
   }
-  fetchArticles() { 
-return axios.get(`${url}?q=${this.query}&key=${API_KEY}&per_page=8&page=${this.page}`, options)
-    .then((response) => { return response })
+ async  fetchArticles() { 
+const response = await  axios.get(`${url}?q=${this.query}&key=${API_KEY}&per_page=40&page=${this.page}`, options)
+    return response 
   }
 }
