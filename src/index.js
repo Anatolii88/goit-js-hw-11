@@ -102,6 +102,6 @@ newApiService.page += 1;
   behavior: "smooth",
 });
   } catch { 
-console.log(error)
+    console.log(error)
   }
 }
